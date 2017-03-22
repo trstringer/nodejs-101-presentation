@@ -4,10 +4,10 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-		<title>reveal.js</title>
+		<title>Node.js 101</title>
 
 		<link rel="stylesheet" href="css/reveal.css">
-		<link rel="stylesheet" href="css/theme/black.css">
+		<link rel="stylesheet" href="css/theme/league.css">
 
 		<!-- Theme used for syntax highlighting of code -->
 		<link rel="stylesheet" href="lib/css/zenburn.css">
@@ -24,8 +24,496 @@
 	<body>
 		<div class="reveal">
 			<div class="slides">
-				<section>Slide 1</section>
-				<section>Slide 2</section>
+                <section data-markdown>
+                    <script type="text/template">
+# Node.js 101
+
+## 🚀
+
+Thomas Stringer <br />
+Technical Evangelist <br />
+[@tr_stringer (Twitter)](https://twitter.com/tr_stringer) <br />
+[tstringer (GitHub)](https://github.com/tstringer)
+                    </script>
+                </section>
+                <section data-markdown>
+                    <script type="text/template">
+## What will we be talking about today?
+
+- What is Node.js and why should we care
+- JavaScript/ECMAScript overview
+- npm
+- ES6 and beyond
+- JavaScript fundamentals and gotchas
+- Node.js project structure
+- Standard library
+- Web development with Node.js
+- Testing
+- Next steps
+                    </script>
+                </section>
+                <section data-markdown>
+                    <script type="text/template">
+## What is Node.js?
+
+*"Node.js is a JavaScript runtime built on Chrome's V8 JavaScript engine. Node.js uses an event-driven, non-blocking I/O model that makes it lightweight and efficient."*
+
+*source: https://nodejs.org*
+
+***
+
+- Run JavaScript almost anywhere
+- Low barrier of entry
+- The language of the web... everywhere
+                    </script>
+                </section>
+                <section data-markdown>
+                    <script type="text/template">
+## Why should we care?
+
+- Node.js is definitely a first-class citizen in Azure
+- Global usage is high and growing
+- The ecosystem is powerful and robust
+- ... it's just a great runtime for development
+                    </script>
+                </section>
+                <section data-markdown>
+                    <script type="text/template">
+## Let's take a step back
+
+- Node.js is a runtime...the language is **JavaScript**
+- To be truly proficient with Node.js, you must be with JavaScript
+
+What is JavaScript? From MDN:
+
+*JavaScript is a cross-platform, object-oriented scripting language. It is a small and lightweight language. Inside a host environment [...], JavaScript can be connected to the objects of its environment to provide programmatic control over them.*
+                    </script>
+                </section>
+                <section data-markdown>
+                    <script type="text/template">
+## ECMAScript 2015 (ES6)
+
+- Many great advancements in the specification
+    - Arrow functions
+    - Class syntax sugar
+    - Template strings
+    - Destructuring
+    - ... and many many more (https://github.com/lukehoban/es6features)
+- Check out Node.js support at http://node.green
+                    </script>
+                </section>
+                <section data-markdown>
+                    <script type="text/template">
+## npm
+
+- The package manager for Node.js and JavaScript
+- Easy to consume
+    - `npm install [--save|--save-dev]`
+- Easy to publish
+    - `npm publish`
+- Easy(ier) to search
+    - `npm search`
+- Think of npm as the way to pull in non-native/standard packages
+- Also able to install global utilities/packages `npm install -g`
+                    </script>
+                </section>
+                <section data-markdown>
+                    <script type="text/template">
+## Basic Node.js project structure
+
+```
+                ├── index.js
+                ├── node_modules
+                └── package.json
+```
+                    </script>
+                </section>
+                <section data-markdown>
+                    <script type="text/template">
+## package.json
+
+```json
+{
+  "name": "node-test",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.15.2"
+  },
+  "devDependencies": {
+    "jest": "^19.0.2"
+  }
+}
+```
+                    </script>
+                </section>
+                <section data-markdown>
+                    <script type="text/template">
+## JS Basics - Output
+
+```javascript
+console.log('hello world');
+// hello world (stdout)
+
+console.error('uh oh');
+// uh oh (stderr)
+```
+                    </script>
+                </section>
+                <section data-markdown>
+                    <script type="text/template">
+## JS Basics - Input
+
+```javascript
+const readline = require('readline');
+
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout
+});
+
+rl.question('What is your name? ', answer => {
+  console.log(`Your name is ${answer}`);
+  rl.close();
+});
+
+// What is your name? Thomas Stringer
+// Your name is Thomas Stringer
+```
+                    </script>
+                </section>
+                <section data-markdown>
+                    <script type="text/template">
+## JS Basics - Prototypal Inheritance
+
+- Don't think in classical inheritance
+- Inheritance based on objects, not "blueprints"
+- Prototype chain
+    - Links between objects
+
+```javascript
+const first = { one: 1 };
+const second = { two: 2 };
+
+Object.setPrototypeOf(first, second);
+
+console.log(first.two);
+// 2
+```
+                    </script>
+                </section>
+                <section data-markdown>
+                    <script type="text/template">
+## JS Basics - Prototypal Inheritance
+
+```javascript
+// Fish object constructor
+function Fish(name) { this.name = name; }
+
+Fish.prototype.swim = function () {
+  console.log(`${this.name} is swimming`);
+};
+
+// Shark object constructor
+function Shark(name) { this.name = name; }
+
+Shark.prototype = new Fish();
+
+const myShark = new Shark('tiger shark');
+myShark.swim();
+// tiger shark is swimming
+```
+                    </script>
+                </section>
+                <section data-markdown>
+                    <script type="text/template">
+## JS Basics - ES6 Classes
+
+```javascript
+class Fish {
+  constructor(name) { this.name = name; }
+
+  swim() {
+    console.log(`${this.name} is swimming`);
+  }
+}
+
+class Shark extends Fish {
+  constructor(name) { super(name); }
+}
+
+const myShark = new Shark('tiger shark');
+myShark.swim();
+// tiger shark is swimming
+```
+                    </script>
+                </section>
+                <section data-markdown>
+                    <script type="text/template">
+## JS Basics - this
+
+```javascript
+function saySomething() {
+  console.log(this.something);
+}
+
+saySomething();
+// undefined
+
+const myObject = { something: 'hi' };
+saySomething.call(myObject);
+// hi
+
+const myOtherObject = { something: 'hello', saySomething };
+myOtherObject.saySomething();
+// hello
+```
+                    </script>
+                </section>
+                <section data-markdown>
+                    <script type="text/template">
+## JS Basics - Variables (hoisting)
+
+```javascript
+console.log(myVariable);
+var myVariable = 'hello';
+// undefined ... why no error?
+
+// equivalent to...
+var moreVariable;
+console.log(moreVariable);
+moreVariable = 'hello';
+// undefined
+```
+                    </script>
+                </section>
+                <section data-markdown>
+                    <script type="text/template">
+## JS Basics - Variables (let)
+
+```javascript
+console.log(myOtherVariable);
+let myOtherVariable = 'hi';
+// ReferenceError: myOtherVariable is not defined
+
+{
+  var more = 'hello';
+}
+console.log(more);
+// hello
+
+{
+  let ok = 'hi';
+}
+console.log(ok);
+// ReferenceError: ok is not defined
+```
+
+*use `let` instead of `var`*
+                    </script>
+                </section>
+                <section data-markdown>
+                    <script type="text/template">
+## JS Basics - Variables (const)
+
+```javascript
+const message = 'hello';
+message = 'hi';
+// TypeError: Assignment to constant variable
+
+const obj = { message: 'hello' };
+obj.message = 'hi';
+// no error
+```
+
+*use `const` when you expect the binding to be constant*
+                    </script>
+                </section>
+                <section data-markdown>
+                    <script type="text/template">
+## JS Basics - Conditional Testing
+
+```javascript
+console.log(1 === '1');
+// false
+
+console.log(1 == '1');
+// true
+
+console.log(true === '1');
+// false
+
+console.log(true == '1');
+// true
+```
+
+*prefer `===` over `==`*
+                    </script>
+                </section>
+                <section data-markdown>
+                    <script type="text/template">
+## JS Basics - Closures
+
+```javascript
+function createPrefixer(prefix) {
+  // return the inner function/closure
+  return function (input) {
+    return `${prefix} ${input}`;
+  }
+}
+
+const prefixHello = createPrefixer('hello');
+console.log(prefixHello('world'));
+// hello world
+```
+                    </script>
+                </section>
+                <section data-markdown>
+                    <script type="text/template">
+## JS Basics - Functions as first class objects
+
+```javascript
+const fs = require('fs');
+
+function handleContent(err, data) {
+  console.log(data);
+}
+
+fs.readFile('/etc/hosts', 'utf8', handleContent);
+// [file contents displayed]
+```
+                    </script>
+                </section>
+                <section data-markdown>
+                    <script type="text/template">
+## JS Basics - Arrays
+
+```javascript
+const myArray = ['hello', 'world'];
+myArray.push('!');
+console.log(myArray.join(' '));
+// hello world !
+
+myArray.pop(); // !
+// [ 'hello', 'world' ]
+
+myArray.filter(val => val === 'hello');
+// [ 'hello' ]
+
+myArray.map(val => val.toUpperCase());
+// [ 'HELLO', 'WORLD' ]
+```
+                    </script>
+                </section>
+                <section data-markdown>
+                    <script type="text/template">
+## JS Basics - Promises
+
+```javascript
+function getHosts() {
+  return new Promise((resolve, reject) => {
+    fs.readFile('/etc/hosts', 'utf8', (err, data) => {
+      if (err) {
+        reject(err);
+        return;
+      }
+      resolve(data);
+    });
+  });
+}
+
+getHosts()
+  .then(data => console.log(data))
+  .catch(err => console.log(`error! ${err.message}`));
+// if successful, file contents. if fail, error message
+```
+                    </script>
+                </section>
+                <section data-markdown>
+                    <script type="text/template">
+## Modules
+
+```javascript
+// one.js
+const two = require('./two');
+
+console.log(two.message);
+
+// two.js
+module.exports.message = 'hello from two!';
+```
+
+```text
+$ node one
+hello from two!
+```
+
+*modularize your code to keep it maintainable and scalable*
+                    </script>
+                </section>
+                <section data-markdown>
+                    <script type="text/template">
+## Node.js Standard Libary
+
+- Robust out-of-the-box experience
+    - File system
+    - HTTP[S]
+    - Network
+    - Buffer
+    - ... and so *so* many more
+    - https://nodejs.org/api
+                    </script>
+                </section>
+                <section data-markdown>
+                    <script type="text/template">
+## Node.js Release Schedule
+
+![release schedule](https://raw.githubusercontent.com/nodejs/LTS/master/schedule.png)
+
+*image from [Node.js Foundation](https://github.com/nodejs/LTS)*
+                    </script>
+                </section>
+                <section data-markdown>
+                    <script type="text/template">
+## Web Frameworks/Libraries
+
+- Express - most common/popular web framework
+- Koa
+- Hapi - fully featured and robust
+- Restify - great for building web APIs
+- Sails - MVC framework
+                    </script>
+                </section>
+                <section data-markdown>
+                    <script type="text/template">
+## The JavaScript Ecosystem
+
+- Most of the fatigue is from front-end
+- Server-side is fairly consistent
+- Lots of OSS developers, lots of options
+- ... this is a good thing!
+- Use and learn what fits your requirements
+    - Don't feel like you need to learn something "just because"
+                    </script>
+                </section>
+                <section data-markdown>
+                    <script type="text/template">
+## The real way to learn Node.js
+
+### 🚀 Start using it 🚀
+                    </script>
+                </section>
+                <section data-markdown>
+                    <script type="text/template">
+## Questions? 🤔
+
+## Comments? 👋
+                    </script>
+                </section>
 			</div>
 		</div>
 
