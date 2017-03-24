@@ -79,6 +79,16 @@ Follow along: https://goo.gl/0OogrA
                 </section>
                 <section data-markdown>
                     <script type="text/template">
+![progamming languages](./images/so_programming_languages.png)
+                    </script>
+                </section>
+                <section data-markdown>
+                    <script type="text/template">
+![frameworks](./images/so_frameworks.png)
+                    </script>
+                </section>
+                <section data-markdown>
+                    <script type="text/template">
 ## Let's take a step back
 
 - Node.js is a runtime...the language is **JavaScript**
@@ -126,6 +136,8 @@ What is JavaScript? From MDN:
                 ├── node_modules
                 └── package.json
 ```
+
+Run `npm init -y` to quickly get up and running
                     </script>
                 </section>
                 <section data-markdown>
@@ -203,6 +215,25 @@ Object.setPrototypeOf(first, second);
 
 console.log(first.two);
 // 2
+```
+                    </script>
+                </section>
+                <section data-markdown>
+                    <script type="text/template">
+## JS Basics - Prototype Chain
+
+```javascript
+const fish = { hasGills: true };
+const shark = { dermis: 'denticle' };
+const tigerShark = { teethCount: 48 };
+
+Object.setPrototypeOf(shark, fish);
+Object.setPrototypeOf(tigerShark, shark);
+
+console.log(tigerShark.hasGills);
+// true
+
+// tigerShark --> shark --> fish --> Object.prototype --> null
 ```
                     </script>
                 </section>
